@@ -3,7 +3,7 @@
 let readyToLoad=false;
 let imagesLoaded=0;
 let totalImagesLoaded=0;
-const count=10;
+const count=30;
 const apiKey='5aQ6zxWgLQLTLCImMAiPn-bIgsOebFM29vcBkB-WewE';
 const apiUrl=`https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}`;
 const imageContainer=document.getElementById('image-container');
@@ -11,15 +11,22 @@ const delayLoader=document.getElementById('loader');
 let photoDataArray=[];
 
 
+
 // Check if all iamge has loaded
 
 function imageLoaded(){
-
-    console.log("image loaded")
+    //imagesLoaded=0;
+    imagesLoaded++;
+    console.log(imagesLoaded)
+    if (imagesLoaded===totalImagesLoaded){
+        readyToLoad=true;
+        delayLoader.hidden=true;
+        
+      
+    }
 }
 
 //Helper function to set atributes
-
 function setAttributes(element,atributes){
        
     for(const key in atributes){
@@ -27,25 +34,34 @@ function setAttributes(element,atributes){
     }
 
 }
+
+
 //Create html elements & Photos and to DOM
 function displayPhotos(){
+    imagesLoaded=0;
+    totalImagesLoaded=photoDataArray.length;
+    console.log('total images',totalImagesLoaded)
     photoDataArray.forEach((photos)=>{
 
-        //Create elements and set attributes 
+        
+       //Create elements and set attributes 
         const anchorElement=document.createElement('a');
-       
-
         setAttributes(anchorElement,{
             href:photos.links.html,
             target:'_blank',
         })
+
+        
        const imageElement=document.createElement('img');
     
         setAttributes(imageElement,{
             src:photos.urls.regular,
             alt:photos.alt_description,
             title:photos.alt_description,
-        })
+        });
+
+
+        // Check if all images have been loaded
         imageElement.addEventListener('load',imageLoaded);
 
     //Put image inside <a></a> then both in imageContainer in DOM
@@ -71,7 +87,9 @@ console.log(error,'no photos')
 }
 
 window.addEventListener('scroll',()=>{
-  if(window.innerHeight+window.scrollY>=document.body.offsetHeight-1000){
+  if(window.innerHeight+window.scrollY>=document.body.offsetHeight-1000 && readyToLoad ){
+
+      readyToLoad=false;
       displayPhotos();
   }
 })
