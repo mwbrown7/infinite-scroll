@@ -20,8 +20,10 @@ function imageLoaded(){
     
     if (imagesLoaded===totalImagesLoaded){
         readyToLoad=true;
-        imagesToLoad=30;
         delayLoader.hidden=true;
+        imagesToLoad=30;
+        apiUrl=`https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${imagesToLoad}`;
+      
         
       
     }
@@ -41,7 +43,6 @@ function setAttributes(element,atributes){
 function displayPhotos(){
     imagesLoaded=0;
     totalImagesLoaded=photoDataArray.length;
-    console.log('total images',totalImagesLoaded)
     photoDataArray.forEach((photos)=>{
 
         
